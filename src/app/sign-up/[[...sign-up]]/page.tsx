@@ -10,16 +10,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
-export default function SignIn() {
+export default function SignUp() {
 	return (
 		<div className="flex items-center justify-center h-full w-full">
 			<Card className="w-[350px]">
 				<CardHeader>
-					<CardTitle>Sign In</CardTitle>
+					<CardTitle>Sign Up</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<form>
 						<div className="grid w-full items-center gap-4">
+							<div className="flex flex-col space-y-1.5">
+								<Label htmlFor="name">Full Name</Label>
+								<Input id="name" placeholder="John Doe" />
+							</div>
 							<div className="flex flex-col space-y-1.5">
 								<Label htmlFor="email">Email</Label>
 								<Input
@@ -35,8 +39,8 @@ export default function SignIn() {
 					</form>
 				</CardContent>
 				<CardFooter className="flex justify-between">
-					<Button>Sign In</Button>
-					<Link href="/sign-up">Create Account</Link>
+					<Button>Sign Up</Button>
+					<Link href="/sign-in">Already has an account?</Link>
 				</CardFooter>
 			</Card>
 		</div>
