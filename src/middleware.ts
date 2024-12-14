@@ -1,24 +1,29 @@
-import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { jwtDecode } from "jwt-decode";
 
-export async function middleware(req) {
-	const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-	const { pathname } = req.nextUrl;
+const protectedRoutes = ["/tasks"];
+const publicRoutes = ["/sign-in", "/sign-up", "/"];
 
-	if (
-		token &&
-		(pathname === "/" || pathname === "/sign-in" || pathname === "/sign-up")
-	) {
-		return NextResponse.redirect(new URL("/tasks", req.url));
+export default async function middleware(req: NextRequest) {
+	const path = req.nextUrl.pathname;
+	const isProtectedRoute = protectedRoutes.includes(path);
+	const isPublicRoute = publicRoutes.includes(path);
+
+	const cookie = (await cookies()).get("session")?.value;
+
+	if (isProtectedRoute && !cookie) {
+		return NextResponse.redirect(new URL("/sign-in", req.nextUrl));
 	}
 
-	if (!token && pathname === "/tasks") {
-		return NextResponse.redirect(new URL("/sign-in", req.url));
+	if (isPublicRoute && cookie && !req.nextUrl.pathname.startsWith("/tasks")) {
+		return NextResponse.redirect(new URL("/tasks", req.nextUrl));
 	}
 
 	return NextResponse.next();
 }
 
+// Routes Middleware should not run on
 export const config = {
-	matcher: ["/", "/sign-in", "/sign-up", "/tasks"],
+	matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };

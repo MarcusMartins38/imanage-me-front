@@ -1,4 +1,4 @@
-import { signIn } from "@/auth";
+"use client";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -10,8 +10,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useActionState } from "react";
+import { signin } from "@/app/actions/auth";
 
 export default function SignInPage() {
+	const [state, action, pending] = useActionState(signin, undefined);
 	return (
 		<div className="flex items-center justify-center h-full w-full">
 			<Card className="w-[350px]">
@@ -19,16 +22,7 @@ export default function SignInPage() {
 					<CardTitle>Sign In</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<form
-						action={async (formData) => {
-							"use server";
-							try {
-								await signIn("credentials", formData);
-							} catch (error) {
-								throw error;
-							}
-						}}
-					>
+					<form action={action}>
 						<div className="grid w-full items-center gap-4">
 							<div className="flex flex-col space-y-1.5">
 								<Label htmlFor="email">Email</Label>
@@ -37,6 +31,9 @@ export default function SignInPage() {
 									name="email"
 									placeholder="johndoe@gmail.com"
 								/>
+								{state?.errors?.email && (
+									<p>{state.errors.email}</p>
+								)}
 							</div>
 							<div className="flex flex-col space-y-1.5">
 								<Label htmlFor="password">Password</Label>
@@ -46,6 +43,20 @@ export default function SignInPage() {
 									placeholder="********"
 									type={"password"}
 								/>
+								{state?.errors?.password && (
+									<div>
+										<p>Password must:</p>
+										<ul>
+											{state.errors.password.map(
+												(error) => (
+													<li key={error}>
+														- {error}
+													</li>
+												),
+											)}
+										</ul>
+									</div>
+								)}
 							</div>
 						</div>
 						<CardFooter className="flex justify-between">
