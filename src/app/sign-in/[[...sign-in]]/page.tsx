@@ -9,9 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AuthError } from "next-auth";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export default function SignInPage() {
 	return (
@@ -27,9 +25,6 @@ export default function SignInPage() {
 							try {
 								await signIn("credentials", formData);
 							} catch (error) {
-								if (error instanceof AuthError) {
-									return;
-								}
 								throw error;
 							}
 						}}
