@@ -1,14 +1,6 @@
-import {
-	BarChart2,
-	Clock,
-	FileText,
-	Settings,
-	Users2,
-	Receipt,
-	ClipboardList,
-	HelpCircle,
-} from "lucide-react";
+import { Settings, ClipboardList } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SignOut } from "./signout-button";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -45,6 +37,8 @@ export function Sidebar({ className }: SidebarProps) {
 					</a>
 				))}
 			</nav>
+
+			<SignOut />
 		</div>
 	);
 }

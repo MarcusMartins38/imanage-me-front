@@ -53,13 +53,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			}
 			return token;
 		},
-
-		async redirect({ url, baseUrl }) {
-			if (url === "/") {
-				return `${baseUrl}/tasks`; // Redireciona para /tasks após login
-			}
-			return url;
-		},
 	},
 	session: {
 		strategy: "jwt",

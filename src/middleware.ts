@@ -12,7 +12,7 @@ export async function middleware(req) {
 		return NextResponse.redirect(new URL("/tasks", req.url));
 	}
 
-	if (!token && (pathname !== "/sign-in" || pathname !== "/sign-up")) {
+	if (!token && pathname === "/tasks") {
 		return NextResponse.redirect(new URL("/sign-in", req.url));
 	}
 
